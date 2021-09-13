@@ -10,7 +10,8 @@ CLIENT = src/client.c
 
 INC = -I./inc
 
-SRC = src/utils.c
+SRC =	src/utils.c \
+		src/utils2.c
 
 OBJ = $(SRC:.c=.o)
 
