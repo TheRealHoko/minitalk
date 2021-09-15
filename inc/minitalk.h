@@ -18,9 +18,10 @@ int		ft_wrsln(char *s);
 char		*ft_ltoa(long i, int base);
 long		ft_atol(char *s);
 void		ft_handler(int signo, siginfo_t *info, void *ctx);
-void		ft_sendmsg(char s, pid_t pid);
+void		ft_sendmsg(char *s, pid_t pid);
+void		ft_sendchar(unsigned char s, pid_t pid);
 void		set_global();
 void		convert_char(int i, siginfo_t *info);
-char		bin_to_c(char binstr[8]);
+unsigned char		bin_to_c(char binstr[8]);
 
 #endif

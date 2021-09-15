@@ -6,7 +6,7 @@
 /*   By: jzeybel <jzeybel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 16:53:34 by jzeybel           #+#    #+#             */
-/*   Updated: 2021/09/13 16:54:57 by jzeybel          ###   ########.fr       */
+/*   Updated: 2021/09/15 19:24:56 by jzeybel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,28 @@ long	ft_atol(char *s)
 	return (res);
 }
 
-void	ft_sendmsg(char s, pid_t pid)
+void	ft_sendchar(unsigned char s, pid_t pid)
 {
-	char	*s1;
-	char	c;
+	int	i;
 
-	s1 = ft_ltoa(s, 2);
-	c = bin_to_c(s1);
-	ft_wrs(s1);
-	ft_wrs(" ");
-	write(1, &c, 1);
-	ft_wrs("\n");
-	while (*s1)
+	i = 8;
+	while (i)
 	{
-		if (*s1 == '0')
+		if (!((s >> --i) % 2))
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
-		usleep(200);
-		s1++;
 	}
+}
+
+void	ft_sendmsg(char *s, pid_t pid)
+{
+	while (*s)
+	{
+		ft_sendchar(*s, pid);
+		s++;
+	}
+	ft_sendchar('\n', pid);
 }
 
 void	ft_handler(int signo, siginfo_t *info, void *ctx)
@@ -73,9 +75,9 @@ void	set_global()
 		exit(0);
 }
 
-char	bin_to_c(char	binstr[8])
+unsigned char	bin_to_c(char	binstr[8])
 {
-	char	c;
+	unsigned char	c;
 
 	c = 0;
 	while (*binstr)
@@ -99,8 +101,7 @@ void	convert_char(int i, siginfo_t *info)
 	{
 		(void)info;
 		g_bit.c = bin_to_c(g_bit.bitstr);
-		if ((g_bit.c >= 32) && (g_bit.c <= 126))
-			write(1, &g_bit.c, 1);
+		write(1, &g_bit.c, 1);
 		free(g_bit.bitstr);
 		set_global();
 	}
