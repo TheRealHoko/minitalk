@@ -21,7 +21,7 @@ int	ft_wrsln(char	*s)
 
 	i = write(1, s, ft_len(s));
 	write(1, "\n", 1);
-	return (i);
+	return (i + 1);
 }
 
 int	ft_sum(long i, int base)
