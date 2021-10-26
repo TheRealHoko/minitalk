@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jzeybel <jzeybel@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/26 18:35:25 by jzeybel           #+#    #+#             */
+/*   Updated: 2021/10/26 18:35:27 by jzeybel          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minitalk.h"
 
 unsigned int	ft_len(char *s)
@@ -10,12 +22,12 @@ unsigned int	ft_len(char *s)
 	return (len);
 }
 
-int	ft_wrs(char	*s)
+int	ft_wrs(char *s)
 {
 	return (write(1, s, ft_len(s)));
 }
 
-int	ft_wrsln(char	*s)
+int	ft_wrsln(char *s)
 {
 	int	i;
 
@@ -40,8 +52,8 @@ int	ft_sum(long i, int base)
 char	*ft_ltoa(long i, int base)
 {
 	static char	s[10];
-	int	size;
-	int	len;
+	int			size;
+	int			len;
 
 	size = ft_sum(i, base);
 	if (base == 2)

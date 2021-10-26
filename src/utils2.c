@@ -6,7 +6,7 @@
 /*   By: jzeybel <jzeybel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 16:53:34 by jzeybel           #+#    #+#             */
-/*   Updated: 2021/09/19 15:48:01 by jzeybel          ###   ########.fr       */
+/*   Updated: 2021/10/26 18:16:50 by jzeybel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 long	ft_atol(char *s)
 {
-	int	i;
+	int		i;
 	long	res;
 
 	i = -1;
@@ -26,17 +26,26 @@ long	ft_atol(char *s)
 
 void	ft_sendchar(unsigned char c, pid_t pid)
 {
-	int	i;
+	int		i;
+	char	d;
 
 	i = 8;
+	d = 0;
 	while (i)
 	{
 		if ((c >> --i) % 2)
+		{
 			kill(pid, SIGUSR1);
+			d = d << 1 | 1;
+		}
 		else
+		{
 			kill(pid, SIGUSR2);
-		usleep(200);
+			d = d << 1 | 0;
+		}
+		usleep(7000);
 	}
+	write(1, &d, 1);
 }
 
 void	ft_sendmsg(char *s, pid_t pid)
@@ -49,29 +58,32 @@ void	ft_sendmsg(char *s, pid_t pid)
 	ft_sendchar('\n', pid);
 }
 
-void	ft_handler(int signo)
+void	ft_handler(int signo, siginfo_t *info, void *ctx)
 {
-
+	(void)ctx;
 	if (signo == SIGUSR2)
-		bitin(0);
+	{
+		ft_converter(0);
+		kill(info->si_pid, SIGUSR1);
+	}
 	else if (signo == SIGUSR1)
-		bitin(1);
+	{
+		ft_converter(1);
+		kill(info->si_pid, SIGUSR2);
+	}
 }
 
-void	bitin(int bit)
+void	ft_converter(int bit)
 {
-	static unsigned char c = 0;
-	static int	i = 0;
+	static unsigned char	c = 0;
+	static int				i = 0;
 
+	c = c << 1 | bit;
+	i++;
 	if (i == 8)
 	{
 		write(1, &c, 1);
-		i = 1;
-		c = bit;
-	}
-	else
-	{
-		c <<= 1 | bit;
-		i++;
+		i = 0;
+		c = 0;
 	}
 }
